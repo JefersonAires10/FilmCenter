@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Input, Select, Button, Card, Row, Col, DatePicker } from 'antd';
 import * as S from './style';
 import styled from 'styled-components'; 
-
+import Services from '../../services/services';
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 const { Meta } = Card; 
@@ -24,6 +24,27 @@ const Home = () => {
     });
 
     const [results, setResults] = useState([]);
+    const genres = [
+        { "id": 28, "name": "Ação" },
+        { "id": 12, "name": "Aventura" },
+        { "id": 16, "name": "Animação" },
+        { "id": 35, "name": "Comédia" },
+        { "id": 80, "name": "Crime" },
+        { "id": 99, "name": "Documentário" },
+        { "id": 18, "name": "Drama" },
+        { "id": 10751, "name": "Família" },
+        { "id": 14, "name": "Fantasia" },
+        { "id": 36, "name": "História" },
+        { "id": 27, "name": "Terror" },
+        { "id": 10402, "name": "Música" },
+        { "id": 9648, "name": "Mistério" },
+        { "id": 10749, "name": "Romance" },
+        { "id": 878, "name": "Ficção Científica" },
+        { "id": 10770, "name": "Filme para TV" },
+        { "id": 53, "name": "Suspense" },
+        { "id": 10752, "name": "Guerra" },
+        { "id": 37, "name": "Faroeste" }
+      ]
 
     const handleFilterChange = (key, value) => {
         setFilters({ ...filters, [key]: value });
@@ -33,8 +54,20 @@ const Home = () => {
         // Lógica para buscar filmes com base nos filtros
         // Aqui você pode fazer uma chamada à API e atualizar o estado `results`
         console.log('Filtros aplicados:', filters);
+        
+        const newFilters = {
+            genre_id: filters.genre,
+            min_date: filters.year[0]+'-01-01',
+            max_date: filters.year[1]+'-12-31',
+            vote_average: filters.rating,
+            streaming_providers: [
+                filters.platform
+            ]
+        }
+
+        console.log(newFilters);
         // Exemplo de resultado fictício
-        setResults([
+        /*setResults([
             {
                 id: 1, 
                 poster: 'https://midias.imagemfilmes.com.br/capas/9030fd55-c808-4765-ba1a-30d8970059c5_m.jpg?2025-02-04T16:12:03.786338',
@@ -44,7 +77,13 @@ const Home = () => {
                 platform: 'Netflix',
                 description: 'A sample movie description'
             }
-        ]);
+        ]);*/
+        const fetchMovies = async () => {
+            const response = await Services.getMovies(newFilters);
+            console.log(response);
+            setResults(response);
+        }
+        fetchMovies();
     };
 
     return (
@@ -61,9 +100,9 @@ const Home = () => {
                     style={{ width: 350, marginRight: 10 }}
                     onChange={(value) => handleFilterChange('genre', value)}
                 >
-                    <Option value="acao">Ação</Option>
-                    <Option value="comedia">Comédia</Option>
-                    <Option value="drama">Drama</Option>
+                    {genres.map((genre) => (
+                        <Option key={genre.id} value={genre.id}>{genre.name}</Option>
+                    ))}
                 </Select>
                 <RangePicker
                     placeholder={['Ano de início', 'Ano de término']}
@@ -81,9 +120,9 @@ const Home = () => {
                     style={{ width: 350, marginRight: 10 }}
                     onChange={(value) => handleFilterChange('platform', value)}
                 >
-                    <Option value="netflix">Netflix</Option>
-                    <Option value="amazon">Amazon Prime</Option>
-                    <Option value="disney">Disney+</Option>
+                    <Option value="Netflix">Netflix</Option>
+                    <Option value="Amazon Prime Video">Amazon Prime</Option>
+                    <Option value="Disney Plus">Disney+</Option>
                 </Select>
 
                 <Button type="primary" onClick={handleSearch}>
@@ -91,12 +130,12 @@ const Home = () => {
                 </Button>
 
                 <S.DivCard style={{ marginTop: 20 }}>
-                    <Row gutter={16}>
+                    <Row gutter={16} mt={4}>
                         {results.map((item) => (
-                            <Col key={item.id} xs={12} sm={8} md={6} lg={4}>
+                            <Col key={item.id} xs={12} sm={8} md={6} lg={4} >
                                 <Card
                                     hoverable
-                                    cover={<CardImage alt={item.title} src={item.poster} />}
+                                    cover={<CardImage alt={item.title} src={'https://image.tmdb.org/t/p/w500/'+item.poster_path} />}
 
                                 >
                                     <Meta
