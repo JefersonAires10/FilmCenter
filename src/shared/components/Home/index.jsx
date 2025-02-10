@@ -86,6 +86,19 @@ const Home = () => {
         fetchMovies();
     };
 
+    const handleSetMovies = async (id,status) => {
+        const response = await Services.setMovies(id, status);
+        if(response) {
+            console.log('Filme atualizado');
+            setResults(
+                //tira o filme que foi atualizado
+                results.filter((item
+                    ) => item.id !== id
+            )
+            );
+        }
+    }
+
     return (
         <S.Container>
             <S.Title>Te ajudamos a escolher.</S.Title>
@@ -129,19 +142,36 @@ const Home = () => {
                     Buscar
                 </Button>
 
-                <S.DivCard style={{ marginTop: 20 }}>
-                    <Row gutter={16} mt={4}>
+                <S.DivCard style={{ marginTop: 50, marginLeft: 135 }}>
+                    <Row gutter={20}>
                         {results.map((item) => (
-                            <Col key={item.id} xs={12} sm={8} md={6} lg={4} >
+                            <Col key={item.id} xs={18} sm={8} md={6} lg={4} >
                                 <Card
                                     hoverable
-                                    cover={<CardImage alt={item.title} src={'https://image.tmdb.org/t/p/w500/'+item.poster_path} />}
+                                    cover={<CardImage alt={item.title} src={'https://image.tmdb.org/t/p/w400/'+item.poster_path} />}
 
                                 >
                                     <Meta
                                         title={item.title}
                                         description={item.description}
                                     />
+                                    <div
+                                        style={{
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            marginTop: 10
+                                        }}
+                                    >
+                                        <Button onClick={
+                                            () => handleSetMovies(item.id, 2)
+                                        } type="primary" style={{ marginTop: 10 }}>Já Assisti!</Button>
+                                        <Button onClick={
+                                            () => handleSetMovies(item.id, 1)
+                                        } type="primary" style={{ marginTop: 10 }}>Quero Assistir!</Button>
+                                        <Button onClick={
+                                            () => handleSetMovies(item.id, 3)
+                                        } type="primary" style={{ marginTop: 10 }}>Blacklist</Button>
+                                    </div>
                                 </Card>
                             </Col>
                         ))}

@@ -1,9 +1,37 @@
 import { Col, Row } from "antd";
 import { Container, Title, StyledCard, CardImage, Div } from "./style";
-
+import Services from "../../services/services";
+import { useEffect, useState } from "react";
 const { Meta } = StyledCard;
 
 const Favorites = () => {
+    const [watchList, setWatchList] = useState([]);
+    const [watched, setWatched] = useState([]);
+    const [blackList, setBlackList] = useState([]);
+
+    useEffect(() => {
+        const getLists = async () => {
+            const response = await Services.getMoviesList();
+            //verifique se response é um array, e dps percorre ele com map colocando os status em suas respectivas listas
+            console.log(response);
+            if (Array.isArray(response)) {
+                console.log('entrou');
+                response.map((item) => {
+                    if (item.status === 'watchlist') {
+                        setWatchList((prev) => [...prev, item]);
+                    } else if (item.status === 'watched') {
+                        setWatched((prev) => [...prev, item]);
+                    } else if (item.status === 'blacklist') {
+                        setBlackList((prev) => [...prev, item]);
+                    }
+                });
+            }
+            
+        }
+        getLists();
+
+    }, []);
+
     const favoriteItems = [
         {
             id: 1,
@@ -61,11 +89,11 @@ const Favorites = () => {
     return (
         <Container>
             <Div>
-                <Title>Meus Favoritos</Title>
+                <Title>Já vistos:</Title>
                 <Row gutter={[16, 16]}>
-                    {favoriteItems.map((item) => (
+                    {watched.map((item) => (
                         <Col key={item.id} xs={12} sm={8} md={6} lg={4}> 
-                            <StyledCard hoverable cover={<CardImage alt={item.title} src={item.image} />}>
+                            <StyledCard hoverable cover={<CardImage alt={item.title} src={'https://image.tmdb.org/t/p/w400/'+item.poster_path} />}>
                                 <Meta title={item.title} description={item.description} />
                             </StyledCard>
                         </Col>
@@ -74,9 +102,20 @@ const Favorites = () => {
 
                 <Title style={{ marginTop: "24px" }}>Minha Lista</Title>
                 <Row gutter={[16, 16]}>
-                    {myListItems.map((item) => (
+                    {watchList.map((item) => (
                         <Col key={item.id} xs={12} sm={8} md={6} lg={4}>
-                            <StyledCard hoverable cover={<CardImage alt={item.title} src={item.image} />}>
+                            <StyledCard hoverable cover={<CardImage alt={item.title} src={'https://image.tmdb.org/t/p/w400/'+item.poster_path} />}>
+                                <Meta title={item.title} description={item.description} />
+                            </StyledCard>
+                        </Col>
+                    ))}
+                </Row>
+
+                <Title style={{ marginTop: "24px" }}>Blacklist</Title>
+                <Row gutter={[16, 16]}>
+                    {blackList.map((item) => (
+                        <Col key={item.id} xs={12} sm={8} md={6} lg={4}>
+                            <StyledCard hoverable cover={<CardImage alt={item.title} src={'https://image.tmdb.org/t/p/w400/'+item.poster_path} />}>
                                 <Meta title={item.title} description={item.description} />
                             </StyledCard>
                         </Col>
