@@ -1,13 +1,15 @@
-import './App.css'
+
+import { BrowserRouter } from 'react-router-dom'
+import { Router } from './routes'
 
 function App() {
-
   return (
     <div>
-      <h1>FilmCenterFront</h1>
+      <BrowserRouter>
+        <Router />
+      </BrowserRouter>
     </div>
   )
 }
 
 export default App
-  

@@ -1,0 +1,117 @@
+import { useState } from 'react';
+import { Input, Select, Button, Card, Row, Col, DatePicker } from 'antd';
+import * as S from './style';
+import styled from 'styled-components'; 
+
+const { Option } = Select;
+const { RangePicker } = DatePicker;
+const { Meta } = Card; 
+
+
+const CardImage = styled.img`
+  object-fit: cover;  
+  width: 100%;
+  height: 200px;
+`;
+
+const Home = () => {
+    const [filters, setFilters] = useState({
+        genre: '',
+        year: [],
+        rating: '',
+        type: '',
+        platform: ''
+    });
+
+    const [results, setResults] = useState([]);
+
+    const handleFilterChange = (key, value) => {
+        setFilters({ ...filters, [key]: value });
+    };
+
+    const handleSearch = () => {
+        // Lógica para buscar filmes com base nos filtros
+        // Aqui você pode fazer uma chamada à API e atualizar o estado `results`
+        console.log('Filtros aplicados:', filters);
+        // Exemplo de resultado fictício
+        setResults([
+            {
+                id: 1, 
+                poster: 'https://midias.imagemfilmes.com.br/capas/9030fd55-c808-4765-ba1a-30d8970059c5_m.jpg?2025-02-04T16:12:03.786338',
+                title: 'Filme Exemplo',
+                year: '2021',
+                rating: '8.5',
+                platform: 'Netflix',
+                description: 'A sample movie description'
+            }
+        ]);
+    };
+
+    return (
+        <S.Container>
+            <S.Title>Te ajudamos a escolher.</S.Title>
+            <S.Div>
+                <S.SubTitle>Não sabe qual filme assistir? Nós te ajudamos! Use os filtros para escolher seu gênero favorito, ano de lançamento,
+                    avaliação e muito mais. Com base nas suas preferências, encontramos as melhores opções para você curtir sem perder tempo.
+                    Explore, descubra e aproveite!</S.SubTitle>
+            </S.Div>
+            <div>
+                <Select
+                    placeholder="Gênero"
+                    style={{ width: 350, marginRight: 10 }}
+                    onChange={(value) => handleFilterChange('genre', value)}
+                >
+                    <Option value="acao">Ação</Option>
+                    <Option value="comedia">Comédia</Option>
+                    <Option value="drama">Drama</Option>
+                </Select>
+                <RangePicker
+                    placeholder={['Ano de início', 'Ano de término']}
+                    style={{ width: 350, marginRight: 10 }}
+                    picker="year"
+                    onChange={(dates, dateStrings) => handleFilterChange('year', dateStrings)}
+                />
+                <Input
+                    placeholder="Nota mínima"
+                    style={{ width: 350, marginRight: 10 }}
+                    onChange={(e) => handleFilterChange('rating', e.target.value)}
+                />
+                <Select
+                    placeholder="Plataforma"
+                    style={{ width: 350, marginRight: 10 }}
+                    onChange={(value) => handleFilterChange('platform', value)}
+                >
+                    <Option value="netflix">Netflix</Option>
+                    <Option value="amazon">Amazon Prime</Option>
+                    <Option value="disney">Disney+</Option>
+                </Select>
+
+                <Button type="primary" onClick={handleSearch}>
+                    Buscar
+                </Button>
+
+                <S.DivCard style={{ marginTop: 20 }}>
+                    <Row gutter={16}>
+                        {results.map((item) => (
+                            <Col key={item.id} xs={12} sm={8} md={6} lg={4}>
+                                <Card
+                                    hoverable
+                                    cover={<CardImage alt={item.title} src={item.poster} />}
+
+                                >
+                                    <Meta
+                                        title={item.title}
+                                        description={item.description}
+                                    />
+                                </Card>
+                            </Col>
+                        ))}
+                    </Row>
+                </S.DivCard>
+            </div>
+
+        </S.Container >
+    );
+};
+
+export default Home;
