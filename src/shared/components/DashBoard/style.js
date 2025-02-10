@@ -14,6 +14,7 @@ export const DashboardContainer = styled.div`
   height: 100%;
   padding: 30px;
   background-color: #181818;
+  margin-top: 4rem;
 `;
 
 export const ChartContainer = styled.div`
@@ -54,4 +55,21 @@ export const StreamingChartContainer = styled.div`
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
   padding: 20px;
   margin-top: 3rem;
+`;
+
+export const TotalTimeContainer = styled.div`
+    background-color: #333;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    width: 45%;
+    margin: 0 auto; 
+    margin-bottom: 20px;
+    margin-top: 4rem;
+`;
+
+export const TotalTimeValue = styled.span`
+   font-size: 2em; 
+   font-weight: bold; 
+   color: #fff;
 `;

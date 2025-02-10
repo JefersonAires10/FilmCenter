@@ -16,6 +16,8 @@ import {
     ResponsiveContainer,
 } from 'recharts';
 
+import { useState, useEffect } from 'react';
+
 const gastosMensaisData = [
     { mes: 'Jan', valor: 120 },
     { mes: 'Fev', valor: 150 },
@@ -32,12 +34,12 @@ const gastosMensaisData = [
 ];
 
 const filmesPorAnoData = [
-    { ano: 2018, quantidade: 80 },
-    { ano: 2019, quantidade: 120 },
-    { ano: 2020, quantidade: 150 },
-    { ano: 2021, quantidade: 130 },
-    { ano: 2022, quantidade: 160 },
-    { ano: 2023, quantidade: 140 },
+    { ano: 2018, quantidade: 80, tempoAssistido: 4 },
+    { ano: 2019, quantidade: 120, tempoAssistido: 62 },
+    { ano: 2020, quantidade: 150, tempoAssistido: 750 },
+    { ano: 2021, quantidade: 130, tempoAssistido: 650 },
+    { ano: 2022, quantidade: 160, tempoAssistido: 8 },
+    { ano: 2023, quantidade: 140, tempoAssistido: 70 },
 ];
 
 const generoPreferidoData = [
@@ -58,6 +60,23 @@ const streamingPreferidoData = [
 ];
 
 const Dashboard = () => {
+
+    const [totalTempoAssistido, setTotalTempoAssistido] = useState(0);
+
+    useEffect(() => {
+        const total = filmesPorAnoData.reduce((acc, curr) => acc + curr.tempoAssistido, 0);
+        setTotalTempoAssistido(total);
+    }, []);
+
+
+    const formatTime = (timeInMinutes) => {
+        const hours = Math.floor(timeInMinutes / 60);
+        const minutes = timeInMinutes % 60;
+        return `${hours}h ${minutes}m`;
+    };
+
+
+
     return (
         <S.DashboardContainer>
             <S.Title>Dashboard de Streaming</S.Title>
@@ -89,8 +108,20 @@ const Dashboard = () => {
                             <Line type="monotone" dataKey="quantidade" stroke="#82ca9d" strokeWidth={3} />
                         </LineChart>
                     </ResponsiveContainer>
+
                 </S.SingleChartContainer>
+
             </S.ChartContainer>
+
+            <S.ChartContainer>
+                <S.TotalTimeContainer>
+                    <h3 style={{ color: '#fff', fontSize: '22px', marginBottom: '15px' }}>Tempo Total Assistido</h3>
+                    <S.TotalTimeValue style={{ color: '#fff', fontSize: '30px' }}>
+                        {formatTime(totalTempoAssistido)}
+                    </S.TotalTimeValue>
+                </S.TotalTimeContainer>
+            </S.ChartContainer>
+
 
             <S.ChartContainer>
                 <S.StreamingChartContainer>

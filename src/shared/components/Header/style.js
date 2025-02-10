@@ -12,6 +12,10 @@ export const Menu = styled.div`
   flex-direction: row;
   align-items: center;
 `
+export const LogoImg = styled.img`
+    width: 12rem;
+    height: 12rem;
+`
 
 export const Logo = styled.div`
   display: flex;
@@ -33,6 +37,7 @@ export const Nav = styled.nav`
   width: 100%;
   justify-content: space-between;
   align-items: center;
+  margin-top: 4rem;
 `   
 
 export const NavItem = styled.div`

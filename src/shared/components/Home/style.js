@@ -8,13 +8,13 @@ export const Container = styled.div`
     justify-content: flex-start;
     align-items: center;
     padding: 20px;
+    margin-top: 10rem;
 `;
 
 export const Title = styled.h1`
     color: #fff;
     font-size: 36px;
     margin-bottom: 20px;
-    margin-top: 3rem;
     text-align: center;
 `;
 

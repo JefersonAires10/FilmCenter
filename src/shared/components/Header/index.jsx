@@ -1,5 +1,6 @@
 import { Input } from 'antd';
-import { Container, Menu, Logo, LogoText, Nav, NavItem, StyledLink } from './style';
+import { Container, Menu, Nav, NavItem, StyledLink, LogoImg } from './style';
+import LogoImage from '../../../assets/logo_movie-hub-removebg.png';
 
 const { Search } = Input;
 
@@ -9,9 +10,7 @@ const Header = () => {
     return (
         <Container>
             <Nav>
-                <Logo>
-                    <LogoText>FilmCenter</LogoText>
-                </Logo>
+                <LogoImg src={LogoImage} alt="FilmCenter Logo" />
                 <div>
                     <Search
                         placeholder="Buscar filmes"
